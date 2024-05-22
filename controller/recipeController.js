@@ -95,3 +95,20 @@ exports.deleteRecipe = async (req, res) => {
     });
   }
 };
+
+exports.searchRecipe = async (req, res) => {
+  const { name } = req.query;
+
+  try {
+    const recipes = await Recipe.find({ name: new RegExp(name, "i") }); // Case-insensitive search
+    res.status(200).json({
+      status: "success",
+      results: recipes.length,
+      data: {
+        recipes,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
