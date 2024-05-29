@@ -35,14 +35,13 @@ exports.getAllComments = catchAsync(async (req, res, next) => {
   })
 
   exports.getCommentByRecipeId = async (req, res) => {
-    const { recipeId } = req.query;
+    const recipeId = req.params.recipeId;
     try {
-      const comment = await Comment.find({ recipeId: new RegExp(recipeId, "i") });
-  
+        const comments = await Comment.find({ recipeId: recipeId });  
       res.status(200).json({
         status: "success",
         data: {
-          comment,
+          comments,
         },
       });
     } catch (error) {
