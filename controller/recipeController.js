@@ -1,11 +1,15 @@
 const Comment = require("../models/commentModel");
 const Recipe = require("../models/recipeModel");
 const catchAsync = require("../utils/catchAsync");
+const upload = require('../utils/multer');
+const cloudinary = require('../utils/cloudinary')
 
 exports.createRecipe = async (req, res) => {
   try {
     let { name, servings, instructions, ingredients, prepTime, cookTime } =
       req.body;
+      const photoUrl = req.file ? req.file.path : '';
+
     const newRecipe = await Recipe.create({
       name,
       servings,
@@ -13,6 +17,7 @@ exports.createRecipe = async (req, res) => {
       ingredients,
       prepTime,
       cookTime,
+      photo: photoUrl
     });
 
     res.status(201).json({
@@ -61,6 +66,11 @@ exports.getAllRecipes = catchAsync(async (req, res, next) => {
 
 exports.updateRecipe = async (req, res) => {
   try {
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      req.body.photo = result.secure_url;
+    }
+
     const recipe = await Recipe.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
