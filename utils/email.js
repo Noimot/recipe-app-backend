@@ -1,17 +1,19 @@
 const nodemailer = require("nodemailer");
 
 const sendEmail = (user) => {
+  console.log('Sending email')
   const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
+    host: "smtp.zoho.com",
+    port: 465,
+    secure: true,
     auth: {
-        user: 'garrett.gerhold@ethereal.email',
-        pass: 'wNKajm9BWxRJGFmmpp'
-    }
+      user: "naima.recipe@kloudlot.com",
+      pass: "Abbey@23",
+    },
   });
-
+  console.log('Sending email.......')
   const mailOptions = {
-    from: "naima.recipe@gmail.com",
+    from: "naima.recipe@kloudlot.com",
     to: user.email,
     subject: "Naima Recipe Signup Notification",
     text: `Dear ${user.name}, thank you for signing up on Naima Recipe App!`,
@@ -24,6 +26,6 @@ const sendEmail = (user) => {
       console.log("Email sent:", info.response);
     }
   });
-}
+};
 
 module.exports = sendEmail;

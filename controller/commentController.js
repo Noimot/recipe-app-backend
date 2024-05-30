@@ -88,3 +88,21 @@ exports.getAllComments = catchAsync(async (req, res, next) => {
       });
     }
   };
+
+  exports.getCommentById = async (req, res) => {
+    try {
+      const comment = await Comment.findById(req.params.id);
+  
+      res.status(200).json({
+        status: "success",
+        data: {
+          comment,
+        },
+      });
+    } catch (error) {
+      res.status(404).json({
+        status: "fail",
+        message: error,
+      });
+    }
+  };
